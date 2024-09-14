@@ -1,0 +1,27 @@
+docker-compose build
+docker-compose run --rm app django-admin startproject core .
+
+# container up
+docker-compose up
+
+# container down
+docker-compose down
+
+# remote terminal inside container
+docker exec -it django_container /bin/bash
+
+# if facing issues while pip commpile while using database, install below
+sudo apt update
+sudo apt install pkg-config
+sudo apt install libmysqlclient-dev
+sudo apt install libmariadb-dev
+
+
+# NOTE-
+1. when sql database doesn't exists from the start, we need to create the database.
+2. usually database container restarts when building for 1st time. add health check logic in it's service definition like below.
+    healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U your_user"]
+        interval: 10s
+        timeout: 5s
+        retries: 5 

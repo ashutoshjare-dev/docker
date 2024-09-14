@@ -1,0 +1,21 @@
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - ./mysql:/var/lib/sql
+    environment:
+      - MYSQL_DATABASE='django-app-db'
+      - MYSQL_ALLOW_EMPTY_PASSWORD="true"
+    container_name: mysql_db
+
+  app:
+    build: . #Dockerfile directory/location
+    volumes:
+      - .:/django
+    ports:
+      - 8000:8000
+    image: app:django
+    container_name: django_container
+    command: python manage.py runserver 0.0.0.0:8000
+    depends_on:
+      - db

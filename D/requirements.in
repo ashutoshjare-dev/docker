@@ -1,0 +1,8 @@
+asgiref
+Django
+pytz
+datetime
+sqlparse
+psycopg2-binary
+redis
+celery

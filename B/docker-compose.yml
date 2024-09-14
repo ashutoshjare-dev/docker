@@ -1,0 +1,29 @@
+services:
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - ./mysql:/var/lib/sql
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_DATABASE='django-app-db'
+      - MYSQL_ALLOW_EMPTY_PASSWORD="true"
+    container_name: mysql_db
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: . #Dockerfile directory/location
+    volumes:
+      - .:/django
+    ports:
+      - 8000:8000
+    image: app:django
+    container_name: django_container
+    command: python manage.py runserver 0.0.0.0:8000
+    depends_on:
+      - mysql:
+        condition: service_healthy
